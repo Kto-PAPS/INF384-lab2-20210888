@@ -81,3 +81,28 @@ def desglose(envio: Envio) -> dict[str, float]:
         "factor_zona": factor,
         "total": calcular(envio),
     }
+
+def clasificar_riesgo_envio(envio: Envio) -> str:
+    riesgo = 0
+
+    if envio.peso_kg > 30:
+        riesgo += 2
+    elif envio.peso_kg > 15:
+        riesgo += 1
+
+    if envio.valor_declarado > 1000:
+        riesgo += 2
+    elif envio.valor_declarado > 500:
+        riesgo += 1
+
+    if envio.zona in ZONAS_ALEJADAS:
+        riesgo += 2
+
+    if envio.urgente:
+        riesgo += 1
+
+    if riesgo >= 5:
+        return "alto"
+    if riesgo >= 3:
+        return "medio"
+    return "bajo"
