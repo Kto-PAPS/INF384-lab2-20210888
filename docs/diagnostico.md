@@ -52,3 +52,48 @@ La línea base es:
 - Promedio: 62 s
 Después de la intervención compararé este promedio con una ejecución posterior utilizando el caché.
 
+
+------------------------------------
+Parte 4
+
+4.1 Medición posterior
+
+El proxy definido fue la duración total de la ejecución del pipeline.
+La línea base estuvo compuesta por ejecuciones de 53 s, 1m 6s y 1m 7s, con un promedio de 1m 2s.
+
+Después de la intervención, la ejecución exitosa en "main" tomó aproximadamente 80 s.
+
+Por lo tanto, la duración aumentó en aproximadamente 18 s respecto de la línea base:
+
+(80 - 62) / 62 × 100 = 29 %
+
+Esto representa un incremento aproximado de 29 %. Aunque se incorporó caché para las dependencias, el pipeline ahora también realiza una validación adicional del Quality Gate antes de permitir la publicación. Por ello, la mejora en la instalación de dependencias no necesariamente se traduce en una reducción del tiempo total del pipeline.
+
+La intervención prioriza que el feedback sea confiable y que un artefacto que no cumpla las condiciones de calidad no continúe hacia la publicación.
+
+4.2 Justificación de la versión
+
+La versión declarada es 1.3.0.
+
+El punto de partida del historial es el tag v1.2.0. Después de este tag se observan commits de corrección, como:
+
+- fix(tarifas): redondear el costo por peso a dos decimales
+- fix(validaciones): colapsar espacios repetidos en el nombre del cliente
+
+También se encuentra el commit:
+- feat(tarifas): agregar desglose de la tarifa calculada
+
+Según versionamiento semántico, los cambios fix corresponden a correcciones compatibles, mientras que un feat incorpora nueva funcionalidad compatible y requiere incrementar la versión MINOR.
+
+Por ello, al existir una nueva funcionalidad y no identificarse un cambio incompatible, corresponde pasar de 1.2.0 a 1.3.0.
+
+
+4.3 Lo que no se resolvió
+
+Una limitación pendiente es que el pipeline termina con la publicación del artefacto en GitHub Actions, pero todavía no realiza un despliegue real hacia un ambiente de ejecución.
+Esto limita la medición del flujo completo hasta producción y no permite obtener directamente métricas DORA relacionadas con despliegues e incidentes reales.
+Para resolverlo sería necesario incorporar posteriormente una etapa de despliegue hacia un ambiente, mantener el mismo artefacto validado y registrar los despliegues, sus resultados y los tiempos de recuperación en caso de falla.
+
+### 4.4 Declaración de uso de IA generativa
+
+Se utilizó ChatGPT como apoyo para revisar la configuración del pipeline, contrastar conceptos técnicos y mejorar la claridad de algunas respuestas. La ejecución del laboratorio, revisión de resultados, selección de evidencias y sustentación de las decisiones fueron realizadas y verificadas por mi.
